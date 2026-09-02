@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula: Polígonos e suas Classificações</title>
+    
+    <!-- Motor Matemático para Fórmulas -->
+    <script>
+        MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* CONFIGURAÇÕES GERAIS E PALETA DIDÁTICA */
+        :root {
+            --azul-primario: #2563EB;
+            --azul-claro: #EFF6FF;
+            --texto-escuro: #1E293B;
+            --verde-sucesso: #10B981;
+            --laranja-alerta: #F59E0B;
+            --cinza-fundo: #F1F5F9;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cinza-fundo);
+            color: var(--texto-escuro);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* CONTAINER DA APRESENTAÇÃO */
+        .presentation-container {
+            background-color: #FFFFFF;
+            width: 95%;
+            max-width: 1000px;
+            height: 90vh;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            border-top: 6px solid var(--azul-primario);
+        }
+
+        /* CABEÇALHO GLOBAL */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: var(--azul-claro);
+            border-bottom: 2px solid #E2E8F0;
+        }
+        .header img {
+            height: 50px;
+            border-radius: 8px;
+        }
+        .header-info {
+            text-align: right;
+        }
+        .header-info h2 {
+            margin: 0;
+            font-size: 16px;
+            color: var(--azul-primario);
+        }
+        .header-info p {
+            margin: 2px 0 0 0;
+            font-size: 13px;
+            font-weight: bold;
+            color: #64748B;
+        }
+
+        /* SLIDES */
+        .slide {
+            display: none;
+            padding: 40px;
+            flex-grow: 1;
+            overflow-y: auto;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .slide.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* TIPOGRAFIA E ELEMENTOS DE SLIDE */
+        h1 { color: var(--azul-primario); margin-top: 0; font-size: 32px; border-bottom: 2px dashed #CBD5E1; padding-bottom: 10px; }
+        h3 { color: var(--laranja-alerta); font-size: 24px; }
+        p, li { font-size: 20px; line-height: 1.6; }
+        
+        .destaque { font-weight: bold; color: var(--azul-primario); }
+        
+        .img-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .img-container img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* CAIXAS DE PERGUNTAS ENGAJADORAS */
+        .caixa-pergunta {
+            background-color: #FFFBEB;
+            border-left: 6px solid var(--laranja-alerta);
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        .resposta-oculta {
+            display: none;
+            background-color: #ECFDF5;
+            border-left: 6px solid var(--verde-sucesso);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        /* BOTÕES */
+        .btn {
+            background-color: var(--azul-primario);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 0 #1E40AF;
+        }
+        .btn:active { transform: translateY(4px); box-shadow: none; }
+        .btn-verde { background-color: var(--verde-sucesso); box-shadow: 0 4px 0 #047857; }
+        
+        /* CONTROLES DO RODAPÉ */
+        .footer-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: var(--azul-claro);
+            border-top: 2px solid #E2E8F0;
+        }
+        .contador { font-weight: bold; color: #64748B; }
+
+        /* SEÇÃO INTERATIVA DE EXERCÍCIOS */
+        .quiz-container {
+            background-color: #F8FAFC;
+            border: 3px solid #CBD5E1;
+            border-radius: 12px;
+            padding: 30px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .quiz-questao { font-size: 24px; font-weight: bold; color: var(--texto-escuro); margin-bottom: 20px;}
+        .quiz-resposta {
+            display: none;
+            font-size: 22px;
+            color: var(--verde-sucesso);
+            background: #D1FAE5;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #34D399;
+            margin-bottom: 20px;
+        }
+        .quiz-controles { display: flex; gap: 15px; justify-content: flex-end; }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-container">
+        
+        <!-- CABEÇALHO PADRÃO -->
+        <div class="header">
+            <img src="logo-escola.jpg" alt="Logo Escola">
+            <div class="header-info">
+                <h2>Prof. Ricardo Júnior | Matemática 8º Ano</h2>
+                <p>Escola: EMEBTI Itelvina Silvina de Pinho</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 1: APRESENTAÇÃO -->
+        <div class="slide active" id="slide-1">
+            <div style="text-align: center; margin-top: 50px;">
+                <h1 style="border:none; font-size: 45px;">Polígonos e suas Classificações</h1>
+                <p style="color: #64748B;">Tempo Estimado: 100 minutos (2 aulas)</p>
+                
+                <div style="text-align: left; background: var(--azul-claro); padding: 20px; border-radius: 12px; margin-top: 40px; display: inline-block;">
+                    <h3 style="margin-top:0; color: var(--azul-primario);">🎯 Objetivos da Aula</h3>
+                    <ul>
+                        <li>Compreender a definição de polígono e identificar seus elementos.</li>
+                        <li>Diferenciar polígonos convexos e não convexos.</li>
+                        <li>Conhecer as nomenclaturas.</li>
+                        <li>Calcular a quantidade de diagonais utilizando a fórmula matemática.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: DEFINIÇÃO E CLASSIFICAÇÃO -->
+        <div class="slide" id="slide-2">
+            <h1>O que é um Polígono?</h1>
+            <p>Um polígono é uma figura geométrica plana formada por uma linha fechada simples, composta apenas de segmentos de retas, e a sua região interna.</p>
+            
+            <div class="img-container">
+                <img src="img-convexos.png" alt="Polígonos Convexo e Não Convexo">
+            </div>
+
+            <ul>
+                <li><span class="destaque">Convexo:</span> Qualquer linha reta traçada entre dois pontos internos fica 100% dentro da figura.</li>
+                <li><span class="destaque">Não Convexo:</span> Existe pelo menos uma linha interna que passa pelo "lado de fora" da figura.</li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 3: PERGUNTA 1 -->
+        <div class="slide" id="slide-3">
+            <h1>Hora de Pensar! 🧠</h1>
+            <div class="caixa-pergunta">
+                <h3>Pergunta Engajadora 1</h3>
+                <p>Pense em uma estrela desenhada no papel. Se você esticar um elástico perfeitamente ao redor dela, o elástico encosta em todos os lados ou ficam "buracos" para dentro?</p>
+                <p>Baseado nisso, a estrela é convexa ou não convexa?</p>
+                <button class="btn" onclick="mostrarResposta('resp-1')">Revelar Resposta</button>
+            </div>
+            <div id="resp-1" class="resposta-oculta">
+                Não convexa! Ficam "buracos", pois as pontas entram para a região interna da figura, fazendo com que uma linha reta saia do polígono.
+            </div>
+        </div>
+
+        <!-- SLIDE 4: ELEMENTOS -->
+        <div class="slide" id="slide-4">
+            <h1>Elementos do Polígono</h1>
+           <div class="img-container" style="display: flex; justify-content: center; gap: 20px; align-items: center;">
+            <img src="img-elementos.png" alt="Ângulos e Vértices" style="max-height: 230px;">
+            <img src="img-elementos2.png" alt="Diagonais" style="max-height: 230px;">
+        </div>
+            <ul>
+                <li><span class="destaque">Vértices:</span> Os "bicos", pontos de encontro das retas (Ex: A, B, C, D, E).</li>
+                <li><span class="destaque">Lados:</span> As linhas retas que contornam a figura.</li>
+                <li><span class="destaque">Ângulos Internos:</span> A abertura dentro de cada "bico".</li>
+                <li><span class="destaque">Diagonais:</span> Linhas que cruzam o meio, ligando vértices separados.</li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 5: PERGUNTA 2 -->
+        <div class="slide" id="slide-5">
+            <h1>Hora de Pensar! 🧠</h1>
+            <div class="caixa-pergunta">
+                <h3>Pergunta Engajadora 2</h3>
+                <p>Olhando para a imagem anterior do pentágono, conte: quantos vértices ("bicos") ele tem? E quantos lados?</p>
+                <p>Esse número é igual ou diferente?</p>
+                <button class="btn" onclick="mostrarResposta('resp-2')">Revelar Resposta</button>
+            </div>
+            <div id="resp-2" class="resposta-oculta">
+                São 5 vértices e 5 lados! Em qualquer polígono, a quantidade de lados é SEMPRE igual à quantidade de vértices.
+            </div>
+        </div>
+
+        <!-- SLIDE 6: NOMENCLATURA -->
+        <div class="slide" id="slide-6">
+            <h1>Nomenclatura (Nomes)</h1>
+            <p>O nome de um polígono é dado pela quantidade de lados (ou vértices) que ele possui.</p>
+            <div class="img-container">
+                <img src="img-tabela.png" alt="Tabela de Nomenclaturas">
+            </div>
+        </div>
+
+        <!-- SLIDE 7: PERGUNTA 3 -->
+        <div class="slide" id="slide-7">
+            <h1>Hora de Pensar! 🧠</h1>
+            <div class="caixa-pergunta">
+                <h3>Pergunta Engajadora 3</h3>
+                <p>Na Copa do Mundo, se o Brasil ganhar mais uma vez, será chamado de Hexacampeão (6 vezes). Olhando a nossa tabela, como se chama o polígono que possui 6 lados?</p>
+                <button class="btn" onclick="mostrarResposta('resp-3')">Revelar Resposta</button>
+            </div>
+            <div id="resp-3" class="resposta-oculta">
+                Hexágono! O prefixo "Hexa" sempre indica o número 6.
+            </div>
+        </div>
+
+        <!-- SLIDE 8: CÁLCULO DE DIAGONAIS -->
+        <div class="slide" id="slide-8">
+            <h1>A Fórmula das Diagonais</h1>
+            <p>Desenhar todas as diagonais de uma figura de 20 lados seria muito confuso. A matemática nos dá um atalho direto!</p>
+            
+            <div style="background: #FEF2F2; border-left: 6px solid #EF4444; padding: 20px; font-size: 30px; text-align: center; border-radius: 8px; margin: 30px 0;">
+                $$d = \frac{n \cdot (n-3)}{2}$$
+            </div>
+
+            <ul style="font-size: 22px;">
+                <li><span class="destaque">d:</span> É o número de diagonais que queremos descobrir.</li>
+                <li><span class="destaque">n:</span> É o número de lados do polígono.</li>
+                <li><span class="destaque">-3 e 2:</span> São regras fixas da fórmula.</li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 9: EXEMPLOS DE DIAGONAIS -->
+        <div class="slide" id="slide-9">
+            <h1>Exemplos Práticos (Junto com o Professor)</h1>
+            
+            <div style="margin-bottom: 20px; padding: 15px; background: var(--cinza-fundo); border-radius: 8px;">
+                <strong>1. Quadrilátero (n = 4)</strong><br>
+                $$d = \frac{4 \cdot (4-3)}{2} \Rightarrow d = \frac{4 \cdot 1}{2} \Rightarrow d = 2$$
+            </div>
+
+            <div style="margin-bottom: 20px; padding: 15px; background: var(--cinza-fundo); border-radius: 8px;">
+                <strong>2. Pentágono (n = 5)</strong><br>
+                $$d = \frac{5 \cdot (5-3)}{2} \Rightarrow d = \frac{5 \cdot 2}{2} \Rightarrow d = 5$$
+            </div>
+
+            <div style="margin-bottom: 20px; padding: 15px; background: var(--cinza-fundo); border-radius: 8px;">
+                <strong>3. Hexágono (n = 6)</strong><br>
+                $$d = \frac{6 \cdot (6-3)}{2} \Rightarrow d = \frac{6 \cdot 3}{2} \Rightarrow d = 9$$
+            </div>
+        </div>
+
+        <!-- SLIDE 10: ATIVIDADE INTERATIVA (QUIZ) -->
+        <div class="slide" id="slide-10">
+            <h1>Atividade de Fixação</h1>
+            <p>Coloque os conhecimentos em prática. Tente responder antes da revelação!</p>
+            
+            <div class="quiz-container">
+                <div>
+                    <div style="color: var(--azul-primario); font-weight: bold; margin-bottom: 5px;">Questão <span id="q-numero">1</span>/13</div>
+                    <div class="quiz-questao" id="q-texto">Carregando pergunta...</div>
+                    <div class="quiz-resposta" id="q-resposta">Gabarito da resposta...</div>
+                </div>
+                
+                <div class="quiz-controles">
+                    <button class="btn btn-verde" id="btn-revelar" onclick="revelarQuiz()">Revelar Resposta</button>
+                    <button class="btn" id="btn-proxima" onclick="proximaQuestao()" style="display:none;">Próxima Questão ➔</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTROLES DO RODAPÉ -->
+        <div class="footer-controls">
+            <button class="btn" onclick="prevSlide()">⬅ Voltar</button>
+            <div class="contador">Tela <span id="current-slide">1</span> / 10</div>
+            <button class="btn" onclick="nextSlide()">Avançar ➡</button>
+        </div>
+
+    </div>
+
+    <!-- SCRIPT DE CONTROLE E QUIZ -->
+    <script>
+        /* CONTROLE DE NAVEGAÇÃO DOS SLIDES */
+        let currentSlide = 1;
+        const totalSlides = 10;
+
+        function showSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById('slide-' + n).classList.add('active');
+            document.getElementById('current-slide').innerText = n;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        function mostrarResposta(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+
+        /* BANCO DE DADOS DA ATIVIDADE DE FIXAÇÃO */
+        const questoesQuiz = [
+            { q: "Se um segmento de reta traçado entre dois pontos internos passa pelo lado de fora da figura, como esse polígono é classificado?", a: "Não convexo." },
+            { q: "Um polígono possui todos os seus segmentos internos inteiramente contidos dentro de sua região. Qual é a sua classificação?", a: "Convexo." },
+            { q: "Uma figura geométrica apresenta uma 'reentrância' (um recuo voltado para o seu interior). Esse polígono é convexo ou não convexo?", a: "Não convexo." },
+            { q: "Um polígono fechado de 6 lados onde nenhum de seus vértices aponta para o centro da figura recebe qual classificação?", a: "Convexo." },
+            { q: "Como chamamos o ponto exato de encontro entre dois lados consecutivos de uma figura?", a: "Vértice." },
+            { q: "Qual é o nome do segmento de reta que cruza o interior do polígono ligando dois vértices que não são vizinhos?", a: "Diagonal." },
+            { q: "A abertura formada na parte de dentro da figura, bem no encontro de dois lados, recebe qual nome?", a: "Ângulo interno." },
+            { q: "Qual é o nome oficial do polígono de 7 lados e quantas diagonais ele possui?", a: "Heptágono. Cálculo: $d = \\frac{7 \\cdot (7-3)}{2} \\Rightarrow d = 14$ diagonais." },
+            { q: "Um eneágono possui quantos lados? Use a fórmula para calcular o seu total de diagonais.", a: "9 lados. Cálculo: $d = \\frac{9 \\cdot (9-3)}{2} \\Rightarrow d = 27$ diagonais." },
+            { q: "Escreva o nome do polígono de 10 lados e determine a sua quantidade de diagonais.", a: "Decágono. Cálculo: $d = \\frac{10 \\cdot (10-3)}{2} \\Rightarrow d = 35$ diagonais." },
+            { q: "Um polígono possui exatamente 12 vértices. Calcule o seu número de diagonais.", a: "Cálculo: $d = \\frac{12 \\cdot (12-3)}{2} \\Rightarrow d = 54$ diagonais." },
+            { q: "Determine a quantidade total de diagonais que podem ser traçadas em um icoságono (20 lados).", a: "Cálculo: $d = \\frac{20 \\cdot (20-3)}{2} \\Rightarrow d = 170$ diagonais." },
+            { q: "Um octógono tem 8 lados. Aplique a fórmula matemática e descubra quantas diagonais ele tem.", a: "Cálculo: $d = \\frac{8 \\cdot (8-3)}{2} \\Rightarrow d = 20$ diagonais." }
+        ];
+
+        let indexQuiz = 0;
+
+        function carregarQuestao() {
+            document.getElementById('q-numero').innerText = indexQuiz + 1;
+            document.getElementById('q-texto').innerHTML = questoesQuiz[indexQuiz].q;
+            document.getElementById('q-resposta').innerHTML = questoesQuiz[indexQuiz].a;
+            
+            // Oculta a resposta e o botão de próxima
+            document.getElementById('q-resposta').style.display = 'none';
+            document.getElementById('btn-proxima').style.display = 'none';
+            document.getElementById('btn-revelar').style.display = 'inline-block';
+
+            // Atualiza fórmulas matemáticas dinâmicas
+            MathJax.typesetPromise();
+        }
+
+        function revelarQuiz() {
+            document.getElementById('q-resposta').style.display = 'block';
+            document.getElementById('btn-revelar').style.display = 'none';
+            
+            if (indexQuiz < questoesQuiz.length - 1) {
+                document.getElementById('btn-proxima').style.display = 'inline-block';
+            } else {
+                document.getElementById('btn-proxima').innerText = "Fim da Atividade 🎉";
+                document.getElementById('btn-proxima').style.display = 'inline-block';
+                document.getElementById('btn-proxima').disabled = true;
+            }
+        }
+
+        function proximaQuestao() {
+            if (indexQuiz < questoesQuiz.length - 1) {
+                indexQuiz++;
+                carregarQuestao();
+            }
+        }
+
+        // Inicia o Quiz no carregamento da tela
+        window.onload = function() {
+            carregarQuestao();
+        }
+    </script>
+</body>
+</html>
